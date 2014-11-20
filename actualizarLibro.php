@@ -8,17 +8,19 @@
         
         
 <?php
-include_once "./controller/conexion.php";
-$id = $_GET["id"];
+include_once "./controller/conexion.php"; //Incluimos la conexión.
+$id = $_GET["id"]; //Recibe por URL el id del libro a editar.
 $conexion = conectar();
-$consulta = "select titulo_libro, cant_pag, editorial, descripcion_libro, num_ejemplares from libro where id_libro =".$id; 
-$q = pg_query($conexion,$consulta);
+$consulta = "select id_libro,titulo_libro, cant_pag, editorial, descripcion_libro, num_ejemplares from libro where id_libro =".$id; 
+$q = pg_query($conexion,$consulta); //Ejecutamos la consulta.
 if($q)
 {       
 
-$p= pg_fetch_object($q);
+$p= pg_fetch_object($q); //Transformamos la consula a obejto.
 
-?>        <form name="libro" action="./controller/alibro.php" method="POST">
+?>        
+        
+       <form name="libro" action="./controller/aLibro.php" method="POST">
             <div>   Título Libro: <input type="text" name="titulo" value="<?php echo $p->titulo_libro; ?>" > </div>
             </br>
             <div>   Editorial: <input type="text" name="editorial" value="<?php echo $p->editorial; ?>"> </div>
@@ -29,7 +31,10 @@ $p= pg_fetch_object($q);
             </br>
             <div>   Número de Ejemplares: <input type="text" name="ejemplares" value="<?php echo $p->num_ejemplares; ?>"> </div>
             </br>
-            <input type="submit" value="Actualizar" >
+	    <!-- Creamos un input invisible con el id del libro a editar.-->  
+            <input type="hidden" value=<?php echo $p->id_libro ?> name="id_libro"> </td>
+              
+            <input type="submit" value="Actualizar" name="actualizar">
         </form>
 <?php 
 }
